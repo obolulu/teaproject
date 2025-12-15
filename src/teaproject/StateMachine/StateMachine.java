@@ -3,7 +3,7 @@ package teaproject.StateMachine;
 import java.util.Dictionary;
 
 public abstract class StateMachine {
-    protected Dictionary<States,State> stateDictionary;
+    protected Dictionary<TeapotStates,State> stateDictionary;
     private State _currentState;
 
         public State get_currentState(){

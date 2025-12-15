@@ -1,5 +1,6 @@
 package teaproject;
 
+import teaproject.StateMachine.TeapotStates;
 import teaproject.Teapot.TeapotStateMachine;
 
 public class TeaProject {
@@ -29,7 +30,7 @@ public class TeaProject {
             for (int i = 0; i < 10; i++) {
                 Thread.sleep(1000);
                 teapot.update(); // Check if timer expired
-                if (teapot.getCurrentStateType() == teaproject.StateMachine.States.DONE) {
+                if (teapot.getCurrentStateType() == TeapotStates.DONE) {
                     break;
                 }
             }
@@ -50,7 +51,7 @@ public class TeaProject {
             for (int i = 0; i < 15; i++) {
                 Thread.sleep(1000);
                 teapot.update(); // Check if timer expired
-                if (teapot.getCurrentStateType() == teaproject.StateMachine.States.DONE) {
+                if (teapot.getCurrentStateType() == TeapotStates.DONE) {
                     break;
                 }
             }

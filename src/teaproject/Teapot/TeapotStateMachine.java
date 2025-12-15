@@ -2,7 +2,7 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
-import teaproject.StateMachine.States;
+import teaproject.StateMachine.TeapotStates;
 
 import java.util.Hashtable;
 
@@ -15,13 +15,13 @@ public final class TeapotStateMachine extends StateMachine {
     
     public TeapotStateMachine() {
         stateDictionary = new Hashtable<>();
-        stateDictionary.put(States.EMPTY, new EmptyState(this));
-        stateDictionary.put(States.IDLE, new IdleState(this));
-        stateDictionary.put(States.BOILING_WATER, new BoilingWaterState(this));
-        stateDictionary.put(States.TEA, new TeaState(this));
-        stateDictionary.put(States.DONE, new DoneState(this));
+        stateDictionary.put(TeapotStates.EMPTY, new EmptyState(this));
+        stateDictionary.put(TeapotStates.IDLE, new IdleState(this));
+        stateDictionary.put(TeapotStates.BOILING_WATER, new BoilingWaterState(this));
+        stateDictionary.put(TeapotStates.TEA, new TeaState(this));
+        stateDictionary.put(TeapotStates.DONE, new DoneState(this));
 
-        super.ChangeState(stateDictionary.get(States.EMPTY));
+        super.ChangeState(stateDictionary.get(TeapotStates.EMPTY));
         this.numberOfCups = 0;
         this.startPressed = false;
         this.boilWaterPressed = false;
@@ -62,17 +62,17 @@ public final class TeapotStateMachine extends StateMachine {
     public int getNumberOfCups() { return numberOfCups; }
     public void setNumberOfCups(int cups) { this.numberOfCups = cups; }
     
-    public void transitionTo(States state) {
+    public void transitionTo(TeapotStates state) {
         super.ChangeState(stateDictionary.get(state));
     }
     
-    public States getCurrentStateType() {
+    public TeapotStates getCurrentStateType() {
         State current = get_currentState();
-        if (current instanceof EmptyState) return States.EMPTY;
-        if (current instanceof IdleState) return States.IDLE;
-        if (current instanceof TeaState) return States.TEA;
-        if (current instanceof BoilingWaterState) return States.BOILING_WATER;
-        if (current instanceof DoneState) return States.DONE;
-        return States.EMPTY;
+        if (current instanceof EmptyState) return TeapotStates.EMPTY;
+        if (current instanceof IdleState) return TeapotStates.IDLE;
+        if (current instanceof TeaState) return TeapotStates.TEA;
+        if (current instanceof BoilingWaterState) return TeapotStates.BOILING_WATER;
+        if (current instanceof DoneState) return TeapotStates.DONE;
+        return TeapotStates.EMPTY;
     }
 }

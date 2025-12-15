@@ -9,4 +9,6 @@ public abstract class State {
 
     //
     public abstract State CheckState();
+
+    public abstract Enum getStateEnum();
 }

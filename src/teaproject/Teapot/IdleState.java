@@ -2,7 +2,7 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
-import teaproject.StateMachine.States;
+import teaproject.StateMachine.TeapotStates;
 
 public final class IdleState extends State {
     private TeapotStateMachine stateMachine;
@@ -28,12 +28,12 @@ public final class IdleState extends State {
     @Override
     public State CheckState() {
         if (stateMachine.isStartPressed()) {
-            stateMachine.transitionTo(States.TEA);
+            stateMachine.transitionTo(TeapotStates.TEA);
             return stateMachine.get_currentState();
         }
         
         if (stateMachine.isBoilWaterPressed()) {
-            stateMachine.transitionTo(States.BOILING_WATER);
+            stateMachine.transitionTo(TeapotStates.BOILING_WATER);
             return stateMachine.get_currentState();
         }
         

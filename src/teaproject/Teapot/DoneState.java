@@ -2,7 +2,7 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
-import teaproject.StateMachine.States;
+import teaproject.StateMachine.TeapotStates;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +36,7 @@ public class DoneState extends teaproject.StateMachine.State {
     @Override
     public State CheckState() {
         if (stateMachine.isResetPressed()) {
-            stateMachine.transitionTo(States.EMPTY);
+            stateMachine.transitionTo(TeapotStates.EMPTY);
             return stateMachine.get_currentState();
         }
         

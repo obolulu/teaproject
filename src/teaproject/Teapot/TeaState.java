@@ -2,7 +2,7 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
-import teaproject.StateMachine.States;
+import teaproject.StateMachine.TeapotStates;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,7 +48,7 @@ public final class TeaState extends State {
     @Override
     public State CheckState() {
         if (timerExpired) {
-            stateMachine.transitionTo(States.DONE);
+            stateMachine.transitionTo(TeapotStates.DONE);
             return stateMachine.get_currentState();
         }
         

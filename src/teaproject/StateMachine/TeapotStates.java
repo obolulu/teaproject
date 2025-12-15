@@ -1,6 +1,6 @@
 package teaproject.StateMachine;
 
-public enum States {
+public enum TeapotStates {
     EMPTY,
     IDLE,
     BOILING_WATER,

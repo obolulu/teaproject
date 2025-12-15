@@ -2,7 +2,7 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
-import teaproject.StateMachine.States;
+import teaproject.StateMachine.TeapotStates;
 
 public final class EmptyState extends State{
     private TeapotStateMachine stateMachine;
@@ -32,7 +32,7 @@ public final class EmptyState extends State{
     @Override
     public State CheckState() {
         if (stateMachine.isFilledPressed() && stateMachine.getNumberOfCups() > 0) {
-            stateMachine.transitionTo(States.IDLE);
+            stateMachine.transitionTo(TeapotStates.IDLE);
             return stateMachine.get_currentState();
         }
         

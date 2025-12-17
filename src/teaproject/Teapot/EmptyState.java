@@ -2,15 +2,17 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
+import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
 
-public final class EmptyState extends State{
+public final class EmptyState extends TeapotState {
     private TeapotStateMachine stateMachine;
     
+
     public EmptyState(StateMachine stateMachine) {
+        super(stateMachine, TeapotStates.EMPTY);
         this.stateMachine = (TeapotStateMachine) stateMachine;
     }
-    
     @Override
     public void OnEnter() {
         System.out.println("State: EMPTY - Please fill the teapot");

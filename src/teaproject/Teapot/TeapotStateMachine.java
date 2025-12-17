@@ -1,12 +1,20 @@
 package teaproject.Teapot;
 
+import teaproject.Patterns.Observer;
+import teaproject.Patterns.Subject;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
 import teaproject.StateMachine.TeapotStates;
 
 import java.util.Hashtable;
+import java.util.List;
 
-public final class TeapotStateMachine extends StateMachine {
+public final class TeapotStateMachine extends StateMachine{
+
+    // for observers
+    private List<Observer> observers;
+    //
+
     private int numberOfCups;
     private boolean startPressed;
     private boolean boilWaterPressed;
@@ -20,6 +28,8 @@ public final class TeapotStateMachine extends StateMachine {
         stateDictionary.put(TeapotStates.BOILING_WATER, new BoilingWaterState(this));
         stateDictionary.put(TeapotStates.TEA, new TeaState(this));
         stateDictionary.put(TeapotStates.DONE, new DoneState(this));
+
+        observers = new java.util.ArrayList<>();
 
         super.ChangeState(stateDictionary.get(TeapotStates.EMPTY));
         this.numberOfCups = 0;

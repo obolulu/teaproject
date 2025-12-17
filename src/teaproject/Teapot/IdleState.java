@@ -2,13 +2,13 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
+import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
 
-public final class IdleState extends State {
-    private TeapotStateMachine stateMachine;
-    
+public final class IdleState extends TeapotState {
+
     public IdleState(StateMachine stateMachine) {
-        this.stateMachine = (TeapotStateMachine) stateMachine;
+        super(stateMachine, TeapotStates.IDLE);
     }
     
     @Override

@@ -9,6 +9,7 @@ import java.awt.Color;
 
 import teaproject.Patterns.Observer;
 import teaproject.StateMachine.State;
+import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
 
 import static teaproject.StateMachine.TeapotStates.*;
@@ -18,12 +19,15 @@ import static teaproject.StateMachine.TeapotStates.*;
  * @author esena
  */
 public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Patterns.Observer {
+    private TeaController controller;
 
     /**
      * Creates new form TeaMakerUI
      */
     public TeaMakerUI() {
         initComponents();
+
+        customInitialization();
     }
 
     /**
@@ -227,8 +231,16 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
     }//GEN-LAST:event_jButton_ResetActionPerformed
 
     private void jButton_FilledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_FilledActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_FilledActionPerformed
+        try {
+            int cups = Integer.parseInt(jTextField_Count.getText());
+            if (cups > 0) {
+                controller.handleFilledButton(cups);
+            } else {
+                jLabel_Messages.setText("Please enter a positive number of cups");
+            }
+        } catch (NumberFormatException e) {
+            jLabel_Messages.setText("Please enter a valid number");
+        }    }//GEN-LAST:event_jButton_FilledActionPerformed
 
     /**
      * @param args the command line arguments
@@ -286,8 +298,21 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
 
     @Override
     public void onMessageReceived(String msg, State state) {
+        TeapotStates currentState = ((TeapotState) state).getStateEnum();
+
+        //jLabel_Messages.setText("<html>" + msg + "</html>");
         jLabel_Messages.setText(msg);
-        setStateDisplayHighlight(state.getStateEnum());
+
+        setStateDisplayHighlight(currentState);
+
+        boolean isProcessing = (currentState == TeapotStates.TEA ||
+                currentState == TeapotStates.BOILING_WATER);
+        jButton_Filled.setEnabled(!isProcessing);
+        jButton_Empty.setEnabled(!isProcessing);
+        jButton_BoilWaterButton.setEnabled(!isProcessing);
+
+        // Update date/time
+        updateDateTime();
     }
 
 
@@ -324,5 +349,34 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
         jTextField_BoilingWater.setBackground(INACTIVE);
         jTextField_Done.setBackground(INACTIVE);
     }
+
+    private void customInitialization(){
+        controller = new TeaController(this);
+        updateDateTime();
+        jButton_Empty.addActionListener(evt -> jButton_StartActionPerformed(evt));
+        jButton_BoilWaterButton.addActionListener(evt -> jButton_BoilWaterActionPerformed(evt));
+        jButton_TotalCupsButton.addActionListener(evt -> jButton_TotalCupsActionPerformed(evt));
+    }
+
+
+    private void jButton_StartActionPerformed(java.awt.event.ActionEvent evt) {
+        controller.handleStartButton();
+    }
+
+    private void jButton_BoilWaterActionPerformed(java.awt.event.ActionEvent evt) {
+        controller.handleBoilWaterButton();
+    }
+    private void jButton_TotalCupsActionPerformed(java.awt.event.ActionEvent evt) {
+        int total = controller.getTotalCupsThisMonth();
+        jLabel_TotalCupCount.setText(String.valueOf(total));
+    }
+
+
     // End of variables declaration//GEN-END:variables
+
+    private void updateDateTime() {
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+        jTextField_Day.setText(now.getDayOfWeek().toString());
+        jTextField_Date.setText(now.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
 }

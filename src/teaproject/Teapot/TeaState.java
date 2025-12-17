@@ -2,18 +2,20 @@ package teaproject.Teapot;
 
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
+import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public final class TeaState extends State {
+public final class TeaState extends TeapotState {
     private TeapotStateMachine stateMachine;
     private Timer timer;
     private boolean timerExpired;
     private static final int TEA_BREWING_TIME = 5000;
-    
+
     public TeaState(StateMachine stateMachine) {
+        super(stateMachine, TeapotStates.TEA);
         this.stateMachine = (TeapotStateMachine) stateMachine;
         this.timerExpired = false;
     }

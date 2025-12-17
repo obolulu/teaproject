@@ -7,10 +7,11 @@ import teaproject.StateMachine.TeapotStates;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class DoneState extends teaproject.StateMachine.State {
+public class DoneState extends teaproject.StateMachine.TeapotState {
     private TeapotStateMachine stateMachine;
-    
+
     public DoneState(StateMachine stateMachine) {
+        super(stateMachine, TeapotStates.DONE);
         this.stateMachine = (TeapotStateMachine) stateMachine;
     }
     

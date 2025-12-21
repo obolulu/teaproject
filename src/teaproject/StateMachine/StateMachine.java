@@ -1,7 +1,8 @@
 package teaproject.StateMachine;
 
-import teaproject.Patterns.Observer;
-import teaproject.Patterns.Subject;
+import teaproject.Patterns.NotificationDecorator.Notification;
+import teaproject.Patterns.Observer.Observer;
+import teaproject.Patterns.Observer.Subject;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -18,31 +19,29 @@ public abstract class StateMachine implements Subject {
 
     protected void Tick(){
         _currentState.Execute();
-
         State state = _currentState.CheckState();
         if(state != _currentState){
             ChangeState(state);
         }
     }
     protected void ChangeState(State state){
+            State oldState = _currentState;
         if (_currentState != null) {
             _currentState.OnExit();
         }
         _currentState = state;
         _currentState.OnEnter();
 
-        Notify(null);
-    }
+        if(oldState != _currentState){
+            Notify(new Notification("", _currentState));
+        }
 
-    //added for state custom messages
-    public void notifyObservers(String message) {
-        Notify(message);
     }
 
     @Override
-    public void Notify(String msg) {
+    public void Notify(Notification notification) {
         for (Observer o : observers) {
-            o.onMessageReceived(msg, get_currentState());
+            o.onMessageReceived(notification);
         }
     }
 

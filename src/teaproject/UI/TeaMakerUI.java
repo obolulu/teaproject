@@ -7,18 +7,17 @@ import java.awt.Color;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-import teaproject.Patterns.Observer;
+import teaproject.Patterns.NotificationDecorator.Notification;
+import teaproject.Patterns.Observer.Observer;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
-
-import static teaproject.StateMachine.TeapotStates.*;
 
 /**
  *
  * @author esena
  */
-public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Patterns.Observer {
+public class TeaMakerUI extends javax.swing.JFrame implements Observer {
     private TeaController controller;
 
     /**
@@ -126,6 +125,8 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
 
         jPanel_Messages.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel_Messages.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel_Messages.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         jLabel_Messages.setText("Messages/Warnings/Notifications");
 
         javax.swing.GroupLayout jPanel_MessagesLayout = new javax.swing.GroupLayout(jPanel_Messages);
@@ -227,7 +228,7 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ResetActionPerformed
-        // TODO add your handling code here:
+        controller.handleResetButton();
     }//GEN-LAST:event_jButton_ResetActionPerformed
 
     private void jButton_FilledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_FilledActionPerformed
@@ -236,10 +237,10 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
             if (cups > 0) {
                 controller.handleFilledButton(cups);
             } else {
-                jLabel_Messages.setText("Please enter a positive number of cups");
+                setWrappedText("Please enter a positive number of cups");
             }
         } catch (NumberFormatException e) {
-            jLabel_Messages.setText("Please enter a valid number");
+            setWrappedText("Please enter a valid number");
         }    }//GEN-LAST:event_jButton_FilledActionPerformed
 
     /**
@@ -297,22 +298,35 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
     private javax.swing.JTextField jTextField_MakingTea;
 
     @Override
-    public void onMessageReceived(String msg, State state) {
-        TeapotStates currentState = ((TeapotState) state).getStateEnum();
+    public void onMessageReceived(Notification notification) {
+        setWrappedText(notification.getFormattedMessage());
+        setStateDisplayHighlight(((TeapotState) notification.getState()).getStateEnum());
+    }
 
-        //jLabel_Messages.setText("<html>" + msg + "</html>");
-        jLabel_Messages.setText(msg);
-
-        setStateDisplayHighlight(currentState);
-
-        boolean isProcessing = (currentState == TeapotStates.TEA ||
-                currentState == TeapotStates.BOILING_WATER);
-        jButton_Filled.setEnabled(!isProcessing);
-        jButton_Empty.setEnabled(!isProcessing);
-        jButton_BoilWaterButton.setEnabled(!isProcessing);
-
-        // Update date/time
-        updateDateTime();
+    private void setWrappedText(String text) {
+        if (text == null || text.isEmpty()) {
+            jLabel_Messages.setText("");
+            return;
+        }
+        int baseFontSize = 12;
+        int maxCharsPerLine = 35; // Approximate characters per line at base font size
+        int estimatedLines = (text.length() + maxCharsPerLine - 1) / maxCharsPerLine;
+        
+        int fontSize = baseFontSize;
+        if (estimatedLines > 2) {
+            fontSize = Math.max(9, baseFontSize - (estimatedLines - 2));
+        }
+        
+        String escapedText = text.replace("&", "&amp;")
+                                  .replace("<", "&lt;")
+                                  .replace(">", "&gt;");
+        
+        String htmlText = String.format(
+            "<html><body style='width: %dpx; font-size: %dpx;'>%s</body></html>",
+            275, fontSize, escapedText
+        );
+        
+        jLabel_Messages.setText(htmlText);
     }
 
 
@@ -367,7 +381,7 @@ public class TeaMakerUI extends javax.swing.JFrame implements teaproject.Pattern
         controller.handleBoilWaterButton();
     }
     private void jButton_TotalCupsActionPerformed(java.awt.event.ActionEvent evt) {
-        int total = controller.getTotalCupsThisMonth();
+        int total = controller.getNumberOfCups();
         jLabel_TotalCupCount.setText(String.valueOf(total));
     }
 

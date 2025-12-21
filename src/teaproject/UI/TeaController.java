@@ -19,26 +19,25 @@ public class TeaController {
         updateTimer.start();
     }
     public void handleFilledButton(int cups) {
-        model.onFilledButtonPressed(cups);
+        model.fillCups(cups);
     }
 
     public void handleStartButton() {
-        model.onStartButtonPressed();
+        model.Start();
     }
 
     public void handleBoilWaterButton() {
-        model.onBoilWaterButtonPressed();
+        model.BoilWater();
     }
 
     public void handleResetButton() {
-        model.onResetButtonPressed();
+        model.ResetTeapot();
     }
     public TeapotStateMachine getModel() {
         return model;
     }
 
-    public int getTotalCupsThisMonth(){
-        return 0;
-        // placeholding
+    public int getNumberOfCups(){
+        return model.getNumberOfCups();
     }
 }

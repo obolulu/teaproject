@@ -1,7 +1,6 @@
 package teaproject.Teapot;
 
-import teaproject.Patterns.Observer;
-import teaproject.Patterns.Subject;
+import teaproject.Patterns.Observer.Observer;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
 import teaproject.StateMachine.TeapotStates;
@@ -39,36 +38,36 @@ public final class TeapotStateMachine extends StateMachine{
         this.resetPressed = false;
     }
     
-    public void onFilledButtonPressed(int cups) {
+    public void fillCups(int cups) {
         this.numberOfCups = cups;
         this.filledPressed = true;
         Tick();
         this.filledPressed = false;
     }
     
-    public void onStartButtonPressed() {
+    public void Start() {
         this.startPressed = true;
         Tick();
         this.startPressed = false;
     }
     
-    public void onBoilWaterButtonPressed() {
+    public void BoilWater() {
         this.boilWaterPressed = true;
         Tick();
         this.boilWaterPressed = false;
     }
     
-    public void onResetButtonPressed() {
+    public void ResetTeapot() {
         this.resetPressed = true;
         Tick();
         this.resetPressed = false;
     }
-    
+
     public boolean isStartPressed() { return startPressed; }
     public boolean isBoilWaterPressed() { return boilWaterPressed; }
     public boolean isFilledPressed() { return filledPressed; }
     public boolean isResetPressed() { return resetPressed; }
-    
+
     public int getNumberOfCups() { return numberOfCups; }
     public void setNumberOfCups(int cups) { this.numberOfCups = cups; }
     

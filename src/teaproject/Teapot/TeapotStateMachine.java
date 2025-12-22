@@ -1,5 +1,6 @@
 package teaproject.Teapot;
 
+import teaproject.Database.TeaDatabaseLogger;
 import teaproject.Patterns.Observer.Observer;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
@@ -10,15 +11,11 @@ import java.util.List;
 
 public final class TeapotStateMachine extends StateMachine{
 
-    // for observers
-    private List<Observer> observers;
-    //
-
     private int numberOfCups;
-    private boolean startPressed;
-    private boolean boilWaterPressed;
-    private boolean filledPressed;
-    private boolean resetPressed;
+    private boolean isStartQueued;
+    private boolean isBoilQueued;
+    private boolean isFillQueued;
+    private boolean isResetQueued;
     
     public TeapotStateMachine() {
         stateDictionary = new Hashtable<>();
@@ -27,48 +24,45 @@ public final class TeapotStateMachine extends StateMachine{
         stateDictionary.put(TeapotStates.BOILING_WATER, new BoilingWaterState(this));
         stateDictionary.put(TeapotStates.TEA, new TeaState(this));
         stateDictionary.put(TeapotStates.DONE, new DoneState(this));
-
-        observers = new java.util.ArrayList<>();
-
         super.ChangeState(stateDictionary.get(TeapotStates.EMPTY));
         this.numberOfCups = 0;
-        this.startPressed = false;
-        this.boilWaterPressed = false;
-        this.filledPressed = false;
-        this.resetPressed = false;
+        this.isStartQueued = false;
+        this.isBoilQueued = false;
+        this.isFillQueued = false;
+        this.isResetQueued = false;
     }
     
     public void fillCups(int cups) {
         this.numberOfCups = cups;
-        this.filledPressed = true;
+        this.isFillQueued = true;
         Tick();
-        this.filledPressed = false;
+        this.isFillQueued = false;
     }
     
     public void Start() {
-        this.startPressed = true;
+        this.isStartQueued = true;
         Tick();
-        this.startPressed = false;
+        this.isStartQueued = false;
     }
     
     public void BoilWater() {
-        this.boilWaterPressed = true;
+        this.isBoilQueued = true;
         Tick();
-        this.boilWaterPressed = false;
+        this.isBoilQueued = false;
     }
     
     public void ResetTeapot() {
-        this.resetPressed = true;
+        this.isResetQueued = true;
         Tick();
-        this.resetPressed = false;
+        this.isResetQueued = false;
     }
 
-    public boolean isStartPressed() { return startPressed; }
-    public boolean isBoilWaterPressed() { return boilWaterPressed; }
-    public boolean isFilledPressed() { return filledPressed; }
-    public boolean isResetPressed() { return resetPressed; }
+    public boolean startQueued() { return isStartQueued; }
+    public boolean boilWaterQueued() { return isBoilQueued; }
+    public boolean fillQueued() { return isFillQueued; }
+    public boolean resetQueued() { return isResetQueued; }
 
-    public int getNumberOfCups() { return numberOfCups; }
+    public int getNumberOfCups() { return TeaDatabaseLogger.getTodayTeaLogs(); }
     public void setNumberOfCups(int cups) { this.numberOfCups = cups; }
     
     public void transitionTo(TeapotStates state) {

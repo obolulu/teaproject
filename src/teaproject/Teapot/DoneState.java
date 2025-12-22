@@ -1,5 +1,6 @@
 package teaproject.Teapot;
 
+import teaproject.Database.TeaDatabaseLogger;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
 import teaproject.StateMachine.TeapotStates;
@@ -23,6 +24,8 @@ public class DoneState extends teaproject.StateMachine.TeapotState {
         
         System.out.println("State: DONE - Process complete!");
         System.out.println("Cups: " + stateMachine.getNumberOfCups() + ", Date: " + formattedDateTime);
+
+        TeaDatabaseLogger.logTeaMade(stateMachine.getNumberOfCups());
     }
 
     @Override
@@ -36,7 +39,7 @@ public class DoneState extends teaproject.StateMachine.TeapotState {
 
     @Override
     public State CheckState() {
-        if (stateMachine.isResetPressed()) {
+        if (stateMachine.resetQueued()) {
             stateMachine.transitionTo(TeapotStates.EMPTY);
             return stateMachine.get_currentState();
         }

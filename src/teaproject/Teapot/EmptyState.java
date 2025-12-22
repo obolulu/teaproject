@@ -1,8 +1,6 @@
 package teaproject.Teapot;
 
-import teaproject.Patterns.NotificationDecorator.Notification;
 import teaproject.Patterns.NotificationDecorator.SeverityDecorator;
-import teaproject.Patterns.NotificationDecorator.TimeDecorator;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
 import teaproject.StateMachine.TeapotState;
@@ -29,7 +27,7 @@ public final class EmptyState extends TeapotState {
     
     @Override
     public void Execute() {
-        if (stateMachine.isStartPressed()) {
+        if (stateMachine.startQueued()) {
             // would do this in a single line to reduce multiple variables being created but changed it so it's easier to read ^^
             /*
             Notification notif = new Notification("Cannot start! Teapot is empty. Please fill it first.", this);
@@ -44,7 +42,7 @@ public final class EmptyState extends TeapotState {
     
     @Override
     public State CheckState() {
-        if (stateMachine.isFilledPressed() && stateMachine.getNumberOfCups() > 0) {
+        if (stateMachine.fillQueued() && stateMachine.getNumberOfCups() > 0) {
             stateMachine.transitionTo(TeapotStates.IDLE);
             return stateMachine.get_currentState();
         }

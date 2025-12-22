@@ -27,12 +27,12 @@ public final class IdleState extends TeapotState {
     
     @Override
     public State CheckState() {
-        if (stateMachine.isStartPressed()) {
+        if (stateMachine.startQueued()) {
             stateMachine.transitionTo(TeapotStates.TEA);
             return stateMachine.get_currentState();
         }
         
-        if (stateMachine.isBoilWaterPressed()) {
+        if (stateMachine.boilWaterQueued()) {
             stateMachine.transitionTo(TeapotStates.BOILING_WATER);
             return stateMachine.get_currentState();
         }

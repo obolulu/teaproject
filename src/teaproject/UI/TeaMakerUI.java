@@ -17,7 +17,7 @@ import teaproject.StateMachine.TeapotStates;
  *
  * @author esena
  */
-public class TeaMakerUI extends javax.swing.JFrame implements Observer {
+public class TeaMakerUI extends javax.swing.JFrame {
     private TeaController controller;
 
     /**
@@ -297,8 +297,7 @@ public class TeaMakerUI extends javax.swing.JFrame implements Observer {
     private javax.swing.JTextField jTextField_Idle;
     private javax.swing.JTextField jTextField_MakingTea;
 
-    @Override
-    public void onMessageReceived(Notification notification) {
+    public void TakeNotification(Notification notification) {
         setWrappedText(notification.getFormattedMessage());
         setStateDisplayHighlight(((TeapotState) notification.getState()).getStateEnum());
     }

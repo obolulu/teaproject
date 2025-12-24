@@ -31,7 +31,7 @@ public class DoneState extends teaproject.StateMachine.TeapotState {
         final int DAILY_THRESHOLD = 10;
 
         if(todayTotalCups >= DAILY_THRESHOLD){
-            NotifHelper.SendBaseNotification(stateMachine, "You have made at least 10 cups of tea today.", teaproject.Patterns.NotificationDecorator.SeverityDecorator.Severity.WARNING);
+            NotifHelper.SendBaseNotification(stateMachine, "The number of total cups today has reached to " + todayTotalCups + "!", teaproject.Patterns.NotificationDecorator.SeverityDecorator.Severity.WARNING);
         }
         else{
         NotifHelper.SendBaseNotification(stateMachine, "Teapot is now filled. Please Reset the machine for future use.", teaproject.Patterns.NotificationDecorator.SeverityDecorator.Severity.INFO);

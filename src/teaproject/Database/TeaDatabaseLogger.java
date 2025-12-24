@@ -33,8 +33,8 @@ public class TeaDatabaseLogger {
         }
     }
 
-    public static int getTodayTeaLogs() {
-        String sql = "SELECT SUM(cups) FROM logs WHERE made_at >= CURDATE()";
+    public static int getMonthlyLogs() {
+        String sql = "SELECT SUM(cups) FROM logs WHERE MONTH(made_at) = MONTH(CURDATE()) AND YEAR(made_at) = YEAR(CURDATE())";
         int totalCups = 0;
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -55,4 +55,28 @@ public class TeaDatabaseLogger {
 
         return totalCups;
     }
+
+    public static int getDailyLogs(){
+        String sql = "SELECT SUM(cups) FROM logs WHERE made_at >= CURDATE()";
+        int totalCups = 0;
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) { 
+                totalCups = rs.getInt(1); 
+            } else {
+                System.out.println("No logs found for today.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting today's tea logs: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return totalCups;   
+    }
+
 }

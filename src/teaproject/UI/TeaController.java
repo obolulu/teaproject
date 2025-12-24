@@ -39,8 +39,8 @@ public class TeaController implements Observer {
         return model;
     }
 
-    public int getNumberOfCups(){
-        return model.getNumberOfCups();
+    public int getTodayCups(){
+        return model.getTodayCups();
     }
 
     @Override

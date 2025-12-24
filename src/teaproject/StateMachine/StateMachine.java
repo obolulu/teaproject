@@ -25,16 +25,16 @@ public abstract class StateMachine implements Subject {
         }
     }
     protected void ChangeState(State state){
-            State oldState = _currentState;
+        State oldState = _currentState;
         if (_currentState != null) {
             _currentState.OnExit();
         }
         _currentState = state;
-        _currentState.OnEnter();
-
         if(oldState != _currentState){
-            Notify(new Notification("", _currentState));
+            Notify(new Notification("", _currentState)); // send notification that state has changed
         }
+        _currentState.OnEnter(); // call on enter for new state
+
 
     }
 
@@ -48,6 +48,9 @@ public abstract class StateMachine implements Subject {
     @Override
     public void Subscribe(Observer o) {
         observers.add(o);
+        if (_currentState != null) {
+            o.onMessageReceived(new Notification("", _currentState));
+        }
     }
 
     @Override

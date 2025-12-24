@@ -8,8 +8,6 @@ import java.awt.Color;
  */
 
 import teaproject.Patterns.NotificationDecorator.Notification;
-import teaproject.Patterns.Observer.Observer;
-import teaproject.StateMachine.State;
 import teaproject.StateMachine.TeapotState;
 import teaproject.StateMachine.TeapotStates;
 
@@ -127,15 +125,16 @@ public class TeaMakerUI extends javax.swing.JFrame {
 
         jLabel_Messages.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel_Messages.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jLabel_Messages.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel_Messages.setText("Messages/Warnings/Notifications");
 
         javax.swing.GroupLayout jPanel_MessagesLayout = new javax.swing.GroupLayout(jPanel_Messages);
         jPanel_Messages.setLayout(jPanel_MessagesLayout);
         jPanel_MessagesLayout.setHorizontalGroup(
                 jPanel_MessagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_MessagesLayout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel_Messages, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel_MessagesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel_Messages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())
         );
         jPanel_MessagesLayout.setVerticalGroup(
@@ -173,18 +172,15 @@ public class TeaMakerUI extends javax.swing.JFrame {
                                                 .addGap(36, 36, 36))
                                         .addComponent(jButton_BoilWaterButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                                .addComponent(jPanelState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addComponent(jButton_TotalCupsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(jLabel_TotalCupCount)))
+                                                .addComponent(jButton_TotalCupsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel_TotalCupCount)
                                                 .addGap(24, 24, 24))))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jButton_Empty, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanelState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,7 +295,19 @@ public class TeaMakerUI extends javax.swing.JFrame {
 
     public void TakeNotification(Notification notification) {
         setWrappedText(notification.getFormattedMessage());
-        setStateDisplayHighlight(((TeapotState) notification.getState()).getStateEnum());
+        TeapotStates state = ((TeapotState) notification.getState()).getStateEnum();
+        setStateDisplayHighlight(state);
+        
+        UpdateActionButtons(state);
+    }
+    private void UpdateActionButtons(TeapotStates state) {
+        if(state == TeapotStates.TEA || state == TeapotStates.BOILING_WATER) {
+            disableActionButtons();
+        } else if(state == TeapotStates.DONE) {
+            enableActionButtons();
+        } else {
+            enableActionButtons();
+        }
     }
 
     private void setWrappedText(String text) {
@@ -308,7 +316,7 @@ public class TeaMakerUI extends javax.swing.JFrame {
             return;
         }
         int baseFontSize = 12;
-        int maxCharsPerLine = 35; // Approximate characters per line at base font size
+        int maxCharsPerLine = 45; // Approximate characters per line at base font size
         int estimatedLines = (text.length() + maxCharsPerLine - 1) / maxCharsPerLine;
         
         int fontSize = baseFontSize;
@@ -321,8 +329,8 @@ public class TeaMakerUI extends javax.swing.JFrame {
                                   .replace(">", "&gt;");
         
         String htmlText = String.format(
-            "<html><body style='width: %dpx; font-size: %dpx;'>%s</body></html>",
-            275, fontSize, escapedText
+            "<html><body style='width: 100%%; font-size: %dpx; text-align: right; padding-right: 5px;'>%s</body></html>",
+            fontSize, escapedText
         );
         
         jLabel_Messages.setText(htmlText);
@@ -354,6 +362,20 @@ public class TeaMakerUI extends javax.swing.JFrame {
                 break;
         }
     }
+    
+    public void setButtonsEnabled(boolean filled, boolean start, boolean boilWater) {
+        jButton_Filled.setEnabled(filled);
+        jButton_Empty.setEnabled(start);
+        jButton_BoilWaterButton.setEnabled(boilWater);
+    }
+    
+    public void disableActionButtons() {
+        setButtonsEnabled(false, false, false);
+    }
+    
+    public void enableActionButtons() {
+        setButtonsEnabled(true, true, true);
+    }
 
 
     private void resetAllStateFields() {
@@ -364,11 +386,11 @@ public class TeaMakerUI extends javax.swing.JFrame {
     }
 
     private void customInitialization(){
-        controller = new TeaController(this);
         updateDateTime();
         jButton_Empty.addActionListener(evt -> jButton_StartActionPerformed(evt));
         jButton_BoilWaterButton.addActionListener(evt -> jButton_BoilWaterActionPerformed(evt));
         jButton_TotalCupsButton.addActionListener(evt -> jButton_TotalCupsActionPerformed(evt));
+        controller = new TeaController(this);
     }
 
 
@@ -380,7 +402,7 @@ public class TeaMakerUI extends javax.swing.JFrame {
         controller.handleBoilWaterButton();
     }
     private void jButton_TotalCupsActionPerformed(java.awt.event.ActionEvent evt) {
-        int total = controller.getNumberOfCups();
+        int total = controller.getTodayCups();
         jLabel_TotalCupCount.setText(String.valueOf(total));
     }
 

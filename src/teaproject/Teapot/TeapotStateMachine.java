@@ -1,13 +1,11 @@
 package teaproject.Teapot;
 
 import teaproject.Database.TeaDatabaseLogger;
-import teaproject.Patterns.Observer.Observer;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
 import teaproject.StateMachine.TeapotStates;
 
 import java.util.Hashtable;
-import java.util.List;
 
 public final class TeapotStateMachine extends StateMachine{
 
@@ -62,7 +60,11 @@ public final class TeapotStateMachine extends StateMachine{
     public boolean fillQueued() { return isFillQueued; }
     public boolean resetQueued() { return isResetQueued; }
 
-    public int getNumberOfCups() { return TeaDatabaseLogger.getTodayTeaLogs(); }
+    public int getNumberOfCups() { return numberOfCups; }
+
+    public int getTodayCups() {
+        return TeaDatabaseLogger.getMonthlyLogs();
+    }
     public void setNumberOfCups(int cups) { this.numberOfCups = cups; }
     
     public void transitionTo(TeapotStates state) {

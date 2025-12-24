@@ -1,3 +1,6 @@
+PROJECT DONE BY:
+Ozan Bolulu, 23070006045 Section 1
+
 hello! this is the readme of the project-- I had a lot of fun making it and it was fun to try and 
 experiment with new techniques. I've been interested in state machines for a while now because of
 my interest in NPC AI in games aside from them being used a lot in them compared to some other fields.

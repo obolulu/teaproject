@@ -1,5 +1,6 @@
 package teaproject.Teapot;
 
+import teaproject.Patterns.NotificationDecorator.NotifHelper;
 import teaproject.Patterns.NotificationDecorator.SeverityDecorator;
 import teaproject.StateMachine.State;
 import teaproject.StateMachine.StateMachine;
@@ -18,6 +19,7 @@ public final class EmptyState extends TeapotState {
     public void OnEnter() {
         System.out.println("State: EMPTY - Please fill the teapot");
         stateMachine.setNumberOfCups(0);
+        NotifHelper.SendBaseNotification(stateMachine, "Teapot is empty.Enter a number, then press 'FILLED' to fill it.", SeverityDecorator.Severity.WARNING);
     }
     
     @Override
@@ -37,6 +39,9 @@ public final class EmptyState extends TeapotState {
              */
             // started off as that, then realized I should just write a helper static method for it which you can find here used -- just thought would work best for most cases
             teaproject.Patterns.NotificationDecorator.NotifHelper.SendBaseNotification(stateMachine, "Cannot start! Teapot is empty. Please fill it first.", SeverityDecorator.Severity.ERROR);
+        }
+        else{
+            //NotifHelper.SendBaseNotification(stateMachine, "Teapot is empty.Enter a number, then press 'FILLED' to fill it.", SeverityDecorator.Severity.WARNING);
         }
     }
     
